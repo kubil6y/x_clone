@@ -106,6 +106,15 @@ export const LoginModal = () => {
                         </div>
                     </div>
                 </DialogHeader>
+                <div className="my-4 px-4 py-1 flex items-center justify-between rounded-md border border-zinc-500 dark:border-white-500 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700 transition bg-transparent">
+                    <AppIcons.google />
+                    <div
+                        onClick={() => signIn("google")}
+                        className="flex-1 text-center"
+                    >
+                        Sign In with Google
+                    </div>
+                </div>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}

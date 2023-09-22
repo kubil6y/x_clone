@@ -10,6 +10,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     secret: process.env.NEXTAUTH_SECRET as string,
+    session: {
+        strategy: "jwt",
+    },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID as string,
@@ -69,44 +72,48 @@ export const authOptions: NextAuthOptions = {
     ],
     // https://next-auth.js.org/configuration/callbacks
     callbacks: {
-        jwt: async ({ token }) => {
+        async jwt({ token, user }) {
             const dbUser = await prisma.user.findFirst({
-                where: { email: token?.email },
+                where: {
+                    email: token.email,
+                },
             });
 
-            if (dbUser) {
-                token.id = dbUser.id;
-                token.email = dbUser.email;
-                token.username = dbUser.username;
-                token.picture = dbUser.image;
-
-                if (!dbUser?.username) {
-                    await prisma.user.update({
-                        where: {
-                            id: dbUser?.id,
-                        },
-                        data: {
-                            username: createId(),
-                        },
-                    });
+            if (!dbUser) {
+                if (user) {
+                    token.id = user?.id;
                 }
+                return token;
             }
 
-            return token;
+            if (!dbUser.username) {
+                await prisma.user.update({
+                    where: {
+                        id: dbUser.id,
+                    },
+                    data: {
+                        username: createId(),
+                    },
+                });
+            }
+
+            return {
+                id: dbUser.id,
+                name: dbUser.name,
+                email: dbUser.email,
+                username: dbUser.username,
+                picture: dbUser.image,
+            };
         },
-        session: async ({ session, token }) => {
+        async session({ session, token }) {
             if (token) {
                 session.user.id = token.id;
                 session.user.name = token.name;
-                session.user.username = token.username;
                 session.user.email = token.email;
                 session.user.image = token.picture;
             }
             return session;
         },
-    },
-    pages: {
-        signIn: "/",
     },
 };
 
