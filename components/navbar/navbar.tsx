@@ -3,15 +3,16 @@
 import {
     HomeIcon,
     LucideIcon,
-    LogOutIcon,
     UserIcon,
     BellIcon,
     BellDotIcon,
+    MoreHorizontalIcon,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarItem } from "./navbar-item";
+import { UserAvatar } from "../user-avatar";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -48,17 +49,10 @@ export const Navbar = () => {
         },
     ];
 
-    if (session?.user) {
-        config.push({
-            icon: LogOutIcon,
-            text: "Logout",
-            active: false,
-            onClick: () => signOut(),
-        });
-    }
+    console.log('session use herree', session?.user);
 
     return (
-        <div className="p-4">
+        <div className="p-4 flex flex-col">
             <div className="w-fit lg:w-[240px] space-y-2">
                 <NavbarLogo />
 
@@ -72,6 +66,22 @@ export const Navbar = () => {
                     />
                 ))}
             </div>
+
+            {session?.user && (
+                <div className="mt-auto flex items-center">
+                    <UserAvatar user={session.user} />
+
+                    <div className="flex-1">
+                        <p className="text-sm">{session.user.email}</p>
+                        <p className="">@{session.user.username}</p>
+                    </div>
+
+                    <div className="flex items-center">
+                        <MoreHorizontalIcon size={16} />
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 };

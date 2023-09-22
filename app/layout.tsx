@@ -5,6 +5,7 @@ import { Providers } from "@/providers/providers";
 import { MainLayout } from "@/components/main-layout";
 import { getAuthSession } from "@/lib/nextauth";
 import { BottomAuthNavbar } from "@/components/bottom-auth-navbar";
+import { cn } from "@/lib/utils";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -24,13 +25,15 @@ export default async function RootLayout({
     const session = await getAuthSession();
 
     return (
-        <html lang="en">
-            <body className={font.className}>
+        <html
+            lang="en"
+            style={{ colorScheme: "light" }}
+            className={cn(font.className, "light")}
+        >
+            <body>
                 <Providers>
                     <MainLayout>{children}</MainLayout>
-                    {!session?.user && (
-                        <BottomAuthNavbar />
-                    )}
+                    {!session?.user && <BottomAuthNavbar />}
                 </Providers>
             </body>
         </html>

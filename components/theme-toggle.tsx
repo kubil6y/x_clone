@@ -11,9 +11,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useHasMounted } from "@/hooks/use-has-mounted";
 
 export function ThemeToggle() {
+    const hasMounted = useHasMounted();
     const { setTheme } = useTheme();
+
+    if (!hasMounted) {
+        return null;
+    }
 
     return (
         <DropdownMenu>
