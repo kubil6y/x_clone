@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/providers/providers";
 import { MainLayout } from "@/components/main-layout";
 import { getAuthSession } from "@/lib/nextauth";
+import { BottomAuthNavbar } from "@/components/bottom-auth-navbar";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
     description:
         "Hi everyon i am Elon Ma. Money hah? Ohh! Not bad hah, not bad ah. Hey my birda!",
 };
+
+// NOTE: hover:bg-zinc-(light200,dark700)
 
 export default async function RootLayout({
     children,
@@ -25,7 +28,9 @@ export default async function RootLayout({
             <body className={font.className}>
                 <Providers>
                     <MainLayout>{children}</MainLayout>
-                    {!session?.user && <h1 className="absolute bottom-0 right-0 bg-rose-500 text-white">not logged in</h1>}
+                    {!session?.user && (
+                        <BottomAuthNavbar />
+                    )}
                 </Providers>
             </body>
         </html>
