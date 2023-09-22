@@ -1,0 +1,21 @@
+interface xxProps {
+}
+
+export const xx = ({
+}: xxProps) => {
+    return (
+        <div>
+            <p>xx</p>
+        </div>
+    );
+}
+
+const xxPage = () => {
+    return (
+        <div>
+            <p>xxPage.tsx</p>
+        </div>
+    );
+};
+
+export default xxPage;
