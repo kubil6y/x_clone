@@ -12,6 +12,7 @@ export async function POST(req: Request, _res: Response) {
     try {
         const json = await req.json();
         const body = registerSchema.parse(json);
+
         const userExists = await prisma.user.findFirst({
             where: {
                 OR: [{ email: body.email }, { username: body.username }],
@@ -19,10 +20,10 @@ export async function POST(req: Request, _res: Response) {
         });
 
         if (userExists) {
-            return ErrorResponse.badRequest(req, null, "user already exists");
+            return ErrorResponse.badRequest(req, null, "User already exists");
         }
 
-        const hashedPassword = await bcrypt.hash(body.username, 10);
+        const hashedPassword = await bcrypt.hash(body.password, 10);
 
         const user = await prisma.user.create({
             data: {
