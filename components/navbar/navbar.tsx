@@ -49,8 +49,6 @@ export const Navbar = () => {
         },
     ];
 
-    console.log('session use herree', session?.user);
-
     return (
         <div className="p-4 flex flex-col">
             <div className="w-fit lg:w-[240px] space-y-2">

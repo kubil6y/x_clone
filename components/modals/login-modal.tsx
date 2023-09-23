@@ -162,11 +162,9 @@ export const LoginModal = () => {
                         <Button
                             type="submit"
                             disabled={isLoading}
+                            isLoading={isLoading}
                             className="w-full"
                         >
-                            {isLoading && (
-                                <RotateCwIcon className="animate-spin w-4 h-4 mr-2" />
-                            )}{" "}
                             Sign In
                         </Button>
                     </form>

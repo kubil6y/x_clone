@@ -108,7 +108,7 @@ export const RegisterModal = () => {
                         </div>
                     </div>
                 </DialogHeader>
-                <Form {...form} >
+                <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit((data) =>
                             registerMutation.mutate(data)
@@ -173,12 +173,10 @@ export const RegisterModal = () => {
 
                         <Button
                             type="submit"
+                            isLoading={registerMutation.isLoading}
                             disabled={registerMutation.isLoading}
                             className="w-full"
                         >
-                            {registerMutation.isLoading && (
-                                <RotateCwIcon className="animate-spin w-4 h-4 mr-2" />
-                            )}{" "}
                             Register
                         </Button>
                     </form>
