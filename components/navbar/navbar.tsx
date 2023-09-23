@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarItem } from "./navbar-item";
 import { UserAvatar } from "../user-avatar";
+import { UserAuth } from "./user-auth";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -65,21 +66,7 @@ export const Navbar = () => {
                 ))}
             </div>
 
-            {session?.user && (
-                <div className="mt-auto flex items-center">
-                    <UserAvatar user={session.user} />
-
-                    <div className="flex-1">
-                        <p className="text-sm">{session.user.email}</p>
-                        <p className="">@{session.user.username}</p>
-                    </div>
-
-                    <div className="flex items-center">
-                        <MoreHorizontalIcon size={16} />
-                    </div>
-
-                </div>
-            )}
+            {session?.user && <UserAuth user={session.user} />}
         </div>
     );
 };
