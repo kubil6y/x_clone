@@ -12,8 +12,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarItem } from "./navbar-item";
-import { UserAvatar } from "../user-avatar";
 import { UserNav } from "./user-nav";
+import { MoreNavItem } from "./more-nav-item";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -52,7 +52,7 @@ export const Navbar = () => {
 
     return (
         <div className="p-4 flex flex-col">
-            <div className="w-fit lg:w-[240px] space-y-2">
+            <div className="w-fit md:w-[240px] space-y-2">
                 <NavbarLogo />
 
                 {config.map((item, idx) => (
@@ -64,6 +64,7 @@ export const Navbar = () => {
                         onClick={item.onClick}
                     />
                 ))}
+                <MoreNavItem />
             </div>
 
             {session?.user && <UserNav user={session.user} />}

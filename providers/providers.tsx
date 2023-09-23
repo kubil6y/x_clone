@@ -27,7 +27,9 @@ export const Providers = ({ children }: ProvidersProps) => {
                     {children}
                 </ThemeProvider>
             </SessionProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
+            {/*
+              *<ReactQueryDevtools initialIsOpen={false} />
+              */}
         </QueryClientProvider>
     );
 };

@@ -5,42 +5,33 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuPortal,
     DropdownMenuSeparator,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    LogOutIcon,
-    PaletteIcon,
-    SettingsIcon,
-} from "lucide-react";
-import { MoreHorizontalIcon } from "lucide-react";
+import { LogOutIcon, MoreHorizontalIcon } from "lucide-react";
 import { UserAvatar } from "../user-avatar";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { useThemeModal } from "@/hooks/use-theme-modal";
 
 interface UserAuthProps {
     user: Session["user"];
 }
 
 export const UserNav = ({ user }: UserAuthProps) => {
-    const themeModal = useThemeModal();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-accent cursor-pointer space-x-2">
+                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-accent cursor-pointer space-x-2 md:w-36 lg:w-48 overflow-hidden md:text-xs">
                     <UserAvatar user={user} />
 
-                    <div className="flex-1 text-start">
-                        <p className="text-sm font-semibold">{user.username}</p>
-                        <p className="">@{user.username}</p>
+                    <div className="hidden md:block text-start text-ellipsis overflow-hidden">
+                        <p className="text-sm font-semibold truncate">
+                            {user.username}
+                        </p>
+                        <p className="truncate">@{user.username}</p>
                     </div>
 
-                    <div className="flex items-center">
+                    <div className="hidden md:flex items-center">
                         <MoreHorizontalIcon size={16} />
                     </div>
                 </button>
@@ -48,20 +39,6 @@ export const UserNav = ({ user }: UserAuthProps) => {
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                        <SettingsIcon className="mr-2 h-4 w-4" />
-                        <span>Settings</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                            <DropdownMenuItem onClick={themeModal.open}>
-                                <PaletteIcon className="mr-2 h-4 w-4" />
-                                <span>Themes</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                </DropdownMenuSub>
                 <DropdownMenuItem onClick={() => signOut()}>
                     <LogOutIcon className="mr-2 h-4 w-4" />
                     <span>Log out</span>

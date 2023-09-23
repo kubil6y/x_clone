@@ -21,10 +21,10 @@ export const NavbarItem: React.FC<NavbarItemProps> = ({
             className="w-fit flex items-center gap-3 p-3 rounded-full hover:bg-zinc-200 dark:hover:bg-accent"
             onClick={onClick}
         >
-            <Icon className="w-6 h-6 lg:w-8 lg:h-8" />
+            <Icon className="w-6 h-6 md:w-8 md:h-8" />
             <p
                 className={cn(
-                    "hidden lg:block text-xl",
+                    "hidden md:block text-xl",
                     active ? "font-semibold" : ""
                 )}
             >
