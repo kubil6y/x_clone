@@ -37,30 +37,42 @@ export const ThemeModal = () => {
                         </div>
                     </div>
                 </DialogHeader>
-                <div className="flex items-center">
+                <div className="flex items-center space-x-4">
                     <AspectRatio
+                        tabIndex={1}
                         ratio={16 / 9}
                         className="bg-muted"
                         onClick={() => setTheme("dark")}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                setTheme("dark");
+                            }
+                        }}
                     >
                         <Image
                             src="/black-cat.jpg"
                             alt="black cat"
                             fill
-                            className="rounded-md rounded-r-none object-cover cursor-pointer"
+                            className="rounded-md object-cover cursor-pointer"
                         />
                     </AspectRatio>
 
                     <AspectRatio
+                        tabIndex={2}
                         ratio={16 / 9}
                         className="bg-muted"
                         onClick={() => setTheme("light")}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                setTheme("light");
+                            }
+                        }}
                     >
                         <Image
                             src="/van-kedisi.jpg"
                             alt="white cat"
                             fill
-                            className="rounded-md rounded-l-none object-cover cursor-pointer"
+                            className="rounded-md object-cover cursor-pointer"
                         />
                     </AspectRatio>
                 </div>

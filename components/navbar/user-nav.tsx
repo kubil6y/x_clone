@@ -27,13 +27,12 @@ interface UserAuthProps {
     user: Session["user"];
 }
 
-// TODO: add dropdown menu onClicks
-export const UserAuth = ({ user }: UserAuthProps) => {
+export const UserNav = ({ user }: UserAuthProps) => {
     const themeModal = useThemeModal();
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer space-x-2">
+                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-accent cursor-pointer space-x-2">
                     <UserAvatar user={user} />
 
                     <div className="flex-1 text-start">

@@ -5,7 +5,6 @@ import { Providers } from "@/providers/providers";
 import { MainLayout } from "@/components/main-layout";
 import { getAuthSession } from "@/lib/nextauth";
 import { BottomAuthNavbar } from "@/components/bottom-auth-navbar";
-import { cn } from "@/lib/utils";
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
         "Hi everyon i am Elon Ma. Money hah? Ohh! Not bad hah, not bad ah. Hey my birda!",
 };
 
-// NOTE: hover:bg-zinc-(light200,dark700)
+// NOTE: hover: bg-zinc-200 / bg-accent
 
 export default async function RootLayout({
     children,
@@ -27,8 +26,8 @@ export default async function RootLayout({
     return (
         <html
             lang="en"
-            style={{ colorScheme: "light" }}
-            className={cn(font.className, "light")}
+            className={font.className}
+            suppressHydrationWarning
         >
             <body>
                 <Providers>

@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarItem } from "./navbar-item";
 import { UserAvatar } from "../user-avatar";
-import { UserAuth } from "./user-auth";
+import { UserNav } from "./user-nav";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -66,7 +66,7 @@ export const Navbar = () => {
                 ))}
             </div>
 
-            {session?.user && <UserAuth user={session.user} />}
+            {session?.user && <UserNav user={session.user} />}
         </div>
     );
 };
