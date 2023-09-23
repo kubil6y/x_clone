@@ -18,7 +18,7 @@ export const NavbarItem: React.FC<NavbarItemProps> = ({
 }) => {
     return (
         <button
-            className="w-fit flex items-center gap-3 p-3 rounded-full hover:bg-zinc-200 dark:hover:bg-accent"
+            className="w-fit flex items-center gap-3 p-3 rounded-full hover:bg-zinc-200 dark:hover:bg-accent transition"
             onClick={onClick}
         >
             <Icon className="w-6 h-6 md:w-8 md:h-8" />

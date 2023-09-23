@@ -26,7 +26,7 @@ export const MoreNavItem = ({ }: MoreNavItemProps) => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <button className="w-fit flex items-center gap-3 p-3 rounded-full hover:bg-zinc-200 dark:hover:bg-accent">
+                    <button className="w-fit flex items-center gap-3 p-3 rounded-full hover:bg-zinc-200 dark:hover:bg-accent transition">
                         <MoreHorizontalIcon className="w-6 h-6 md:w-8 md:h-8" />
                         <p className="hidden md:block text-xl">More</p>
                     </button>

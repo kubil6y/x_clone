@@ -20,7 +20,7 @@ export async function POST(req: Request, _res: Response) {
         });
 
         if (userExists) {
-            return ErrorResponse.badRequest(req, null, "User already exists");
+            return ErrorResponse.badRequest(req, "User already exists");
         }
 
         const hashedPassword = await bcrypt.hash(body.password, 10);

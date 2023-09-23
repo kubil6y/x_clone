@@ -6,7 +6,6 @@ import {
     UserIcon,
     BellIcon,
     BellDotIcon,
-    MoreHorizontalIcon,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -14,6 +13,7 @@ import { NavbarLogo } from "./navbar-logo";
 import { NavbarItem } from "./navbar-item";
 import { UserNav } from "./user-nav";
 import { MoreNavItem } from "./more-nav-item";
+import { PostButton } from "./post-button";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -27,6 +27,7 @@ export const Navbar = () => {
     const router = useRouter();
     const { data: session } = useSession();
 
+    // TODO notificationIcon
     const notificationIcon = false ? BellIcon : BellDotIcon;
 
     const config: NavbarItemType[] = [
@@ -52,21 +53,25 @@ export const Navbar = () => {
 
     return (
         <div className="p-4 flex flex-col">
-            <div className="w-fit md:w-[240px] space-y-2">
+            <div className="w-fit md:w-[240px] space-y-4">
                 <NavbarLogo />
 
-                {config.map((item, idx) => (
-                    <NavbarItem
-                        key={idx}
-                        icon={item.icon}
-                        text={item.text}
-                        active={item.active}
-                        onClick={item.onClick}
-                    />
-                ))}
-                <MoreNavItem />
+                {session?.user && (
+                    <>
+                        {config.map((item, idx) => (
+                            <NavbarItem
+                                key={idx}
+                                icon={item.icon}
+                                text={item.text}
+                                active={item.active}
+                                onClick={item.onClick}
+                            />
+                        ))}
+                        <MoreNavItem />
+                        <PostButton />
+                    </>
+                )}
             </div>
-
             {session?.user && <UserNav user={session.user} />}
         </div>
     );

@@ -35,23 +35,23 @@ export class ErrorResponse {
         return NextResponse.json(apiResponse, { status: status });
     }
 
-    public static badRequest(req: Request, err: any, message: string) {
-        return ErrorResponse.error(req, err, StatusCode.BAD_REQUEST, message);
+    public static badRequest(req: Request, message: string) {
+        return ErrorResponse.error(req, null, StatusCode.BAD_REQUEST, message);
     }
 
-    public static notFound(req: Request, err: any) {
+    public static notFound(req: Request) {
         return ErrorResponse.error(
             req,
-            err,
+            null,
             StatusCode.NOT_FOUND,
             ErrorResponse.notFoundResponseMessage
         );
     }
 
-    public static authenticationError(req: Request, err: any) {
+    public static authenticationError(req: Request) {
         return ErrorResponse.error(
             req,
-            err,
+            null,
             StatusCode.UNAUTHORIZED,
             ErrorResponse.authenticationRequiredResponseMessage
         );

@@ -7,7 +7,7 @@ export const NavbarLogo = () => {
     return (
         <Link
             href="/"
-            className="w-fit flex items-center justify-center gap-3 p-3 rounded-full hover:bg-zinc-200 cursor-pointer dark:hover:bg-accent"
+            className="w-fit flex items-center justify-center gap-3 p-3 rounded-full hover:bg-zinc-200 cursor-pointer dark:hover:bg-accent transition"
         >
             <CatIcon className="w-6 h-6 lg:w-8 lg:h-8" />
         </Link>

@@ -53,6 +53,7 @@ model User {
     sessions       Session[]
     createdAt      DateTime  @default(now())
     updatedAt      DateTime  @updatedAt
+    posts          Post[]
 
     @@map("users")
 }
@@ -64,4 +65,15 @@ model VerificationToken {
 
     @@unique([identifier, token])
     @@map("verification_tokens")
+}
+
+model Post {
+    id        String   @id @default(cuid())
+    authorId  String
+    author    User     @relation(fields: [authorId], references: [id])
+    body      String?
+    fileUrl   String?
+    isDeleted Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
