@@ -31,10 +31,9 @@ export const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
         >
             {({ open }) => {
                 return (
-                    <FileImageIcon
-                        onClick={() => open?.()}
-                        className="w-5 h-5 cursor-pointer"
-                    />
+                    <button className="w-5 h-5 flex items-center">
+                        <FileImageIcon onClick={() => open?.()} />
+                    </button>
                 );
             }}
         </CldUploadWidget>
