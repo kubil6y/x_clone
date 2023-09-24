@@ -23,7 +23,6 @@ import { useRegisterModal } from "@/hooks/use-register-modal";
 import { useForm } from "react-hook-form";
 import { RegisterSchema, registerSchema } from "@/validators/register";
 import { AppIcons } from "../app-icons";
-import { RotateCwIcon } from "lucide-react";
 import { useLoginModal } from "@/hooks/use-login-modal";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";

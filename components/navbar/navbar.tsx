@@ -52,7 +52,7 @@ export const Navbar = () => {
     ];
 
     return (
-        <div className="p-4 flex flex-col">
+        <div className="p-2 flex flex-col">
             <div className="w-fit md:w-[240px] space-y-4">
                 <NavbarLogo />
 

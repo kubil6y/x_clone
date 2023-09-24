@@ -15,8 +15,8 @@ export async function POST(req: Request, _res: Response) {
         }
 
         const json = await req.json();
-        const { body, fileUrl } = createPostSchema.parse(json);
-        if (!body && !fileUrl) {
+        const { body, imageUrl } = createPostSchema.parse(json);
+        if (!body && !imageUrl) {
             return ErrorResponse.badRequest(
                 req,
                 "Empty post creation is now allowed."
@@ -25,7 +25,7 @@ export async function POST(req: Request, _res: Response) {
 
         const post = await prisma.post.create({
             data: {
-                fileUrl,
+                imageUrl,
                 body,
                 authorId: session.user.id,
             },
