@@ -4,8 +4,7 @@ import { PostList } from "@/components/posts/post-list";
 export default function Home() {
     return (
         <div>
-            <h1 className="text-5xl text-rose-600">Home page.tsx</h1>
-
+            <h2 className="p-4 font-semibold text-xl">Home</h2>
             <CreatePost imageUploadAllowed />
             <PostList />
         </div>

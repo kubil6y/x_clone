@@ -7,6 +7,7 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
+import axios from "axios";
 import { usePostModal } from "@/hooks/use-post-modal";
 import { CreatePostSchema, createPostSchema } from "@/validators/post";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +25,6 @@ import { ImageUpload } from "./image-upload";
 import Image from "next/image";
 import { EmojiPicker } from "./emoji-picker";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useEffect } from "react";
 
 const testImageUrl =
@@ -84,6 +84,9 @@ export const CreatePost = ({
     });
 
     function onSubmit(input: CreatePostSchema) {
+        if (!input?.body && !input?.imageUrl) {
+            return;
+        }
         postMutation.mutate(input);
     }
 
@@ -106,7 +109,7 @@ export const CreatePost = ({
 
     return (
         <div>
-            <div className="flex p-2">
+            <div className="flex p-4">
                 <div className="mr-4">
                     <UserAvatar user={session.user} isClickable />
                 </div>
@@ -127,10 +130,11 @@ export const CreatePost = ({
                                                 minRows={minRows}
                                             />
                                             <kbd className=" absolute top-0 right-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                                                <span className="text-xs">⌘ + ↵</span>
+                                                <span className="text-xs">
+                                                    ⌘ + ↵
+                                                </span>
                                             </kbd>
                                         </div>
-
                                     </FormItem>
                                 )}
                             />
@@ -160,7 +164,7 @@ export const CreatePost = ({
                             )}
 
                             <div className="flex items-center p-2">
-                                <div className="space-x-3 flex items-center">
+                                <div className="space-x-2 flex items-center">
                                     {imageUploadAllowed && (
                                         <FormField
                                             control={form.control}
@@ -187,10 +191,7 @@ export const CreatePost = ({
                                         onChange={(emoji: string) => {
                                             return form.setValue(
                                                 "body",
-                                                form.getValues("body") +
-                                                " " +
-                                                emoji +
-                                                " "
+                                                form.getValues("body") + emoji
                                             );
                                         }}
                                     />
@@ -205,6 +206,11 @@ export const CreatePost = ({
                                     <Button
                                         type="submit"
                                         isLoading={postMutation.isLoading}
+                                        disabled={
+                                            postMutation.isLoading ||
+                                            (!form.getValues("body") &&
+                                                !form.getValues("imageUrl"))
+                                        }
                                     >
                                         Post
                                     </Button>

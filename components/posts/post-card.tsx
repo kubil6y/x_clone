@@ -5,11 +5,12 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import Link from "next/link";
+import Image from "next/image";
 import { PostWithUserResponse } from "@/types";
 import { UserAvatar } from "../user-avatar";
 import { formatDistance } from "date-fns";
 import { useMemo } from "react";
-import Link from "next/link";
 import { FollowButton } from "../follow-button";
 
 interface PostCardProps {
@@ -23,7 +24,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         });
     }, [post]);
     return (
-        <div className="flex w-full p-2">
+        <div className="flex w-full p-4">
             {/* AVATAR */}
             <HoverCard>
                 <HoverCardTrigger>
@@ -47,9 +48,9 @@ export const PostCard = ({ post }: PostCardProps) => {
             </HoverCard>
 
             {/* CONTENT */}
-            <div className="w-full">
+            <div className="w-full ml-3">
                 {/* top section */}
-                <div className="ml-3 flex items-baseline justify-start text-xs text-zinc-600 dark:text-zinc-400">
+                <div className="flex items-baseline justify-start text-xs text-zinc-600 dark:text-zinc-400 my-0">
                     <Link
                         href={`/${post.author.username}`}
                         className="font-semibold text-base capitalize text-slate-900 dark:text-white hover:underline"
@@ -70,8 +71,25 @@ export const PostCard = ({ post }: PostCardProps) => {
                         {timeAgo}
                     </Link>
                 </div>
+
                 {/* post body */}
-                <div></div>
+                <Link
+                    href={`/${post.author.username}/status/${post.id}`}
+                >
+                    <p className="mt-1/2 mb-1">{post.body}</p>
+
+                    {post.imageUrl && (
+                        <div className="relative w-full rounded-lg overflow-hidden">
+                            <Image
+                                src={post.imageUrl}
+                                width={500}
+                                height={500}
+                                alt="post image"
+                                className="object-cover"
+                            />
+                        </div>
+                    )}
+                </Link>
             </div>
         </div>
     );

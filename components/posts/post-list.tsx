@@ -52,7 +52,7 @@ export const PostList = ({ }: PostListProps) => {
     });
 
     useEffect(() => {
-        if (inView && hasNextPage && !isFetchingNextPage){
+        if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
     }, [inView]);
@@ -65,28 +65,13 @@ export const PostList = ({ }: PostListProps) => {
                 <pre>{JSON.stringify(error, null, 2)}</pre>
             ) : (
                 <>
-                    <div>
-                        <button
-                            onClick={() => fetchPreviousPage()}
-                            disabled={
-                                !hasPreviousPage || isFetchingPreviousPage
-                            }
-                        >
-                            {isFetchingPreviousPage
-                                ? "Loading more..."
-                                : hasPreviousPage
-                                    ? "Load Older"
-                                    : "Nothing more to load"}
-                        </button>
-                    </div>
-
-                    {data.pages.map((page, idx) => {
+                    {data.pages.map((page) => {
                         if (page?.status === "success") {
                             return page.data.posts.map(
                                 (post: PostWithUserResponse) => {
                                     return (
                                         <Fragment key={post.id}>
-                                            <PostCard post={post}/>
+                                            <PostCard post={post} />
                                         </Fragment>
                                     );
                                 }

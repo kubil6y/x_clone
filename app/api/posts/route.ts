@@ -16,6 +16,8 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const cursor = searchParams.get("cursor");
 
+        //await sleep(2000); // TODO remove
+
         let posts: (Post & { author: User })[] = [];
         if (cursor) {
             posts = await prisma.post.findMany({
