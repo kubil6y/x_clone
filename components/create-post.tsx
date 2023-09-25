@@ -184,7 +184,12 @@ export const CreatePost = ({
                                             value={form.getValues("body") ?? ""}
                                         />
                                     </div>
-                                    <Button type="submit">Post</Button>
+                                    <Button
+                                        type="submit"
+                                        isLoading={postMutation.isLoading}
+                                    >
+                                        Post
+                                    </Button>
                                 </div>
                             </div>
                         </form>

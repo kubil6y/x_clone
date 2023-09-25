@@ -1,4 +1,4 @@
-import { UserResponse } from "@/types/user-response";
+import { UserResponse } from "@/types";
 import { User } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"

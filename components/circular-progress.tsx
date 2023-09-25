@@ -1,9 +1,7 @@
 "use client";
 
-import {
-    CircularProgressbar,
-    buildStyles,
-} from "react-circular-progressbar";
+import { useTheme } from "next-themes";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const maxCharacterAmount = 140;
@@ -15,6 +13,7 @@ interface CircularProgressProps {
 export const CircularProgress: React.FC<CircularProgressProps> = ({
     value,
 }) => {
+    const { theme } = useTheme();
     const getCharCounterPathColor = (input: string): string => {
         if (input.length > maxCharacterAmount) {
             return "#ef4444";
@@ -31,7 +30,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
             value={value.length}
             text={(140 - value.length).toString()}
             styles={buildStyles({
-                trailColor: "#ffffff",
+                trailColor: theme === "dark" ? "black" : "white",
                 pathColor: getCharCounterPathColor(value),
                 textSize: 32,
             })}

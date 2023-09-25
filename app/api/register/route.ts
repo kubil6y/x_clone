@@ -4,7 +4,7 @@ import { ErrorResponse } from "@/lib/error-response";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { ApiResponse } from "@/types/api-response";
-import { UserResponse } from "@/types/user-response";
+import { UserResponse } from "@/types";
 import { populateUserResponse } from "@/lib/utils";
 import { HttpStatusCode } from "axios";
 

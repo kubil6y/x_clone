@@ -1,3 +1,5 @@
+import { Post } from "@prisma/client";
+
 export type UserResponse = {
     id: string;
     email: string;
@@ -6,3 +8,5 @@ export type UserResponse = {
     createdAt: Date;
     updatedAt: Date;
 };
+
+export type PostWithUserResponse = Post & { author: UserResponse };
