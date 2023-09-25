@@ -2,16 +2,20 @@
 
 import { Session } from "next-auth";
 import Image from "next/image";
-import { Avatar } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface UserAvatarProps {
     user: Pick<Session["user"], "name" | "image" | "username">;
+    isClickable?: boolean;
 }
 
-export const UserAvatar = ({ user }: UserAvatarProps) => {
+export const UserAvatar = ({ user, isClickable = false }: UserAvatarProps) => {
+    const router = useRouter();
     const username = useMemo(() => {
-        let out: string= "";
+        let out: string = "";
         if (user?.name) {
             const parts = user.name.split(" ");
             if (parts.length >= 2) {
@@ -21,14 +25,22 @@ export const UserAvatar = ({ user }: UserAvatarProps) => {
             }
             return out;
         } else if (user?.username) {
-            out = user.username.substring(0, 2).toUpperCase();
+            out = user.username.substring(0, 2);
         } else {
             out = "";
         }
         return out;
     }, [user]);
+
     return (
-        <Avatar>
+        <Avatar
+            onClick={() => {
+                if (isClickable) {
+                    router.push(`${user.username}`);
+                }
+            }}
+            className={cn(isClickable && "cursor-pointer")}
+        >
             {user.image ? (
                 <div className="relative w-full h-full aspect-square">
                     <Image
@@ -39,9 +51,9 @@ export const UserAvatar = ({ user }: UserAvatarProps) => {
                     />
                 </div>
             ) : (
-                <p className="w-full h-full flex items-center justify-center font-semibold text-2xl">
-                    {username}
-                </p>
+                <AvatarFallback className="font-semibold">
+                    {username.toUpperCase()}
+                </AvatarFallback>
             )}
         </Avatar>
     );

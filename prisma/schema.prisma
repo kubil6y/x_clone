@@ -47,6 +47,7 @@ model User {
     email          String?   @unique
     emailVerified  DateTime?
     username       String?   @unique
+    description    String?
     hashedPassword String?
     image          String?
     accounts       Account[]
@@ -70,9 +71,9 @@ model VerificationToken {
 model Post {
     id        String   @id @default(cuid())
     authorId  String
-    author    User     @relation(fields: [authorId], references: [id])
+    author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
     body      String?
-    imageUrl   String?
+    imageUrl  String?
     isDeleted Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

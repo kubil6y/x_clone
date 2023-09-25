@@ -25,6 +25,7 @@ import Image from "next/image";
 import { EmojiPicker } from "./emoji-picker";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect } from "react";
 
 const testImageUrl =
     "https://res.cloudinary.com/dnqoeal8o/image/upload/v1695575822/r4hdurldtd2psb432iof.jpg";
@@ -86,6 +87,17 @@ export const CreatePost = ({
         postMutation.mutate(input);
     }
 
+    useEffect(() => {
+        function listener(e: KeyboardEvent) {
+            if (e.ctrlKey && e.key === "Enter" && !postMutation.isLoading) {
+                onSubmit(form.getValues());
+            }
+        }
+
+        document.addEventListener("keydown", listener);
+        return () => document.removeEventListener("keydown", listener);
+    }, []);
+
     if (!hasMounted || !session?.user) {
         return null;
     }
@@ -96,7 +108,7 @@ export const CreatePost = ({
         <div>
             <div className="flex p-2">
                 <div className="mr-4">
-                    <UserAvatar user={session.user} />
+                    <UserAvatar user={session.user} isClickable />
                 </div>
 
                 <div className="flex-1">
@@ -107,12 +119,18 @@ export const CreatePost = ({
                                 name="body"
                                 render={({ field }) => (
                                     <FormItem className="">
-                                        <TextareaAutosize
-                                            {...field}
-                                            className="w-full p-2 focus:ring-0 border-none focus:outline-none shadow-none resize-none focus-visible:ring-0 text-xl placeholder:text-xl placeholder:text-slate-400 overflow-hidden dark:bg-black"
-                                            placeholder="Type your message here"
-                                            minRows={minRows}
-                                        />
+                                        <div className="relative">
+                                            <TextareaAutosize
+                                                {...field}
+                                                className="w-full p-2 focus:ring-0 border-none focus:outline-none shadow-none resize-none focus-visible:ring-0 text-xl placeholder:text-xl placeholder:text-slate-400 overflow-hidden dark:bg-black"
+                                                placeholder="Type your message here"
+                                                minRows={minRows}
+                                            />
+                                            <kbd className=" absolute top-0 right-2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                                                <span className="text-xs">⌘ + ↵</span>
+                                            </kbd>
+                                        </div>
+
                                     </FormItem>
                                 )}
                             />

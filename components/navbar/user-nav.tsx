@@ -21,10 +21,10 @@ export const UserNav = ({ user }: UserAuthProps) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-accent cursor-pointer md:w-36 lg:w-48 overflow-hidden md:text-xs transition">
+                <button className="p-2 rounded-full mt-auto flex items-center hover:bg-zinc-200 dark:hover:bg-accent cursor-pointer md:w-36 lg:w-48 overflow-hidden transition">
                     <UserAvatar user={user} />
 
-                    <div className="hidden md:block text-start text-ellipsis overflow-hidden ml-2">
+                    <div className="hidden md:block text-start text-ellipsis overflow-hidden ml-2 md:text-xs">
                         <p className="text-sm font-semibold truncate">
                             {user.username}
                         </p>

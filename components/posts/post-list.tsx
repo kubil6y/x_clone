@@ -1,10 +1,12 @@
 "use client";
 
+import { PostWithUserResponse } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import queryString from "query-string";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { PostCard } from "./post-card";
 
 interface PostListProps { }
 
@@ -49,11 +51,14 @@ export const PostList = ({ }: PostListProps) => {
         },
     });
 
-    console.log(data);
+    useEffect(() => {
+        if (inView && hasNextPage && !isFetchingNextPage){
+            fetchNextPage();
+        }
+    }, [inView]);
 
     return (
         <div>
-            <h1>Infinite Loading</h1>
             {status === "loading" ? (
                 <p>Loading...</p>
             ) : status === "error" ? (
@@ -74,26 +79,22 @@ export const PostList = ({ }: PostListProps) => {
                                     : "Nothing more to load"}
                         </button>
                     </div>
-                    {/*
-                      *{data.pages.map((page) => (
-                      *    <Fragment key={page.nextId}>
-                      *        {page.data.map((project) => (
-                      *            <p
-                      *                style={{
-                      *                    border: "1px solid gray",
-                      *                    borderRadius: "5px",
-                      *                    padding: "10rem 1rem",
-                      *                    background: `hsla(${project.id * 30
-                      *                        }, 60%, 80%, 1)`,
-                      *                }}
-                      *                key={project.id}
-                      *            >
-                      *                {project.name}
-                      *            </p>
-                      *        ))}
-                      *    </Fragment>
-                      *))}
-                      */}
+
+                    {data.pages.map((page, idx) => {
+                        if (page?.status === "success") {
+                            return page.data.posts.map(
+                                (post: PostWithUserResponse) => {
+                                    return (
+                                        <Fragment key={post.id}>
+                                            <PostCard post={post}/>
+                                        </Fragment>
+                                    );
+                                }
+                            );
+                        }
+                        return null;
+                    })}
+
                     <div>
                         <button
                             ref={ref}
@@ -115,9 +116,6 @@ export const PostList = ({ }: PostListProps) => {
                 </>
             )}
             <hr />
-            <Link href="/about">
-                Go to another page
-            </Link>
         </div>
     );
 };

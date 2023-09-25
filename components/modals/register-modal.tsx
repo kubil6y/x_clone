@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRegisterModal } from "@/hooks/use-register-modal";
 import { useForm } from "react-hook-form";
-import { RegisterSchema, registerSchema } from "@/validators/register";
+import { registerFormSchema, RegisterFormSchema } from "@/validators/register";
 import { AppIcons } from "../app-icons";
 import { useLoginModal } from "@/hooks/use-login-modal";
 import { useRouter } from "next/navigation";
@@ -29,6 +29,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useHasMounted } from "@/hooks/use-has-mounted";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
 
 export const RegisterModal = () => {
     const { toast } = useToast();
@@ -36,18 +38,27 @@ export const RegisterModal = () => {
     const registerModal = useRegisterModal();
     const router = useRouter();
     const hasMounted = useHasMounted();
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] =
+        useState<boolean>(false);
 
-    const form = useForm<RegisterSchema>({
-        resolver: zodResolver(registerSchema),
+    function togglePasswordVisibility() {
+        setShowPassword((x) => !x);
+    }
+
+    const form = useForm<RegisterFormSchema>({
+        resolver: zodResolver(registerFormSchema),
         defaultValues: {
+            name: "",
             email: "",
             username: "",
             password: "",
+            confirmPassword: "",
         },
     });
 
     const registerMutation = useMutation({
-        mutationFn: async (input: RegisterSchema) => {
+        mutationFn: async (input: RegisterFormSchema) => {
             const { data } = await axios.post("/api/register", input);
             return data;
         },
@@ -116,6 +127,23 @@ export const RegisterModal = () => {
                     >
                         <FormField
                             control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="John Doe"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
                             name="username"
                             render={({ field }) => (
                                 <FormItem>
@@ -159,11 +187,83 @@ export const RegisterModal = () => {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="password"
-                                            placeholder="Your password"
-                                            {...field}
-                                        />
+                                        <div className="relative">
+                                            <Input
+                                                type={
+                                                    showPassword
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                                placeholder="Password"
+                                                {...field}
+                                            />
+                                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
+                                                {showPassword ? (
+                                                    <EyeOffIcon
+                                                        className="h-6 w-6"
+                                                        onClick={() =>
+                                                            setShowPassword(
+                                                                (x) => !x
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <EyeIcon
+                                                        className="h-6 w-6"
+                                                        onClick={() =>
+                                                            setShowPassword(
+                                                                (x) => !x
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Confirm Password</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
+                                            <Input
+                                                type={
+                                                    showConfirmPassword
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                                placeholder="Password"
+                                                {...field}
+                                            />
+                                            <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer">
+                                                {showConfirmPassword ? (
+                                                    <EyeOffIcon
+                                                        className="h-6 w-6"
+                                                        onClick={() =>
+                                                            setShowConfirmPassword(
+                                                                (x) => !x
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <EyeIcon
+                                                        className="h-6 w-6"
+                                                        onClick={() =>
+                                                            setShowConfirmPassword(
+                                                                (x) => !x
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

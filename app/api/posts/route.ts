@@ -1,6 +1,6 @@
+import prisma from "@/lib/prisma";
 import { ErrorResponse } from "@/lib/error-response";
 import { getAuthSession } from "@/lib/nextauth";
-import prisma from "@/lib/prisma";
 import { populateUserResponse } from "@/lib/utils";
 import { ApiResponse } from "@/types/api-response";
 import { PostWithUserResponse } from "@/types";
@@ -13,13 +13,6 @@ const POSTS_TAKE = 10;
 
 export async function GET(req: Request) {
     try {
-        /* // TODO there should be a custom feed per user
-        const session = await getAuthSession();
-        if (!session?.user) {
-            return ErrorResponse.authenticationError(req);
-        }
-        */
-
         const { searchParams } = new URL(req.url);
         const cursor = searchParams.get("cursor");
 
