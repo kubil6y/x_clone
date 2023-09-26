@@ -7,15 +7,13 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
     return (
-        <div className="h-screen">
-            <div className="container h-full mx-auto xl:px-30 max-w-6xl">
-                <div className="grid grid-cols-4 h-full">
-                    <Navbar />
-                    <div className="col-span-3 lg:col-span-2 border-x-[1px] border-slate-200">
-                        {children}
-                    </div>
-                    <RightSection />
+        <div className="p-0 container h-full mx-auto max-w-6xl">
+            <div className="h-full flex">
+                <Navbar />
+                <div className="border-x-[1px] border-slate-200 ml-16 md:ml-[240px] w-full flex-1">
+                    {children}
                 </div>
+                <RightSection />
             </div>
         </div>
     );

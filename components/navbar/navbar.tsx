@@ -52,8 +52,8 @@ export const Navbar = () => {
     ];
 
     return (
-        <div className="p-2 flex flex-col">
-            <div className="w-fit md:w-[240px] space-y-4">
+        <div className="flex flex-col fixed h-screen w-12 md:w-[240px] pt-2">
+            <div className="space-y-4 mx-2">
                 <NavbarLogo />
 
                 {session?.user && (

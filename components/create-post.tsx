@@ -197,12 +197,13 @@ export const CreatePost = ({
                                     />
                                 </div>
 
-                                <div className="space-x-3 ml-auto flex items-center">
-                                    <div className="w-9 h-9 flex items-center justify-center">
+                                <div className="space-x-4 ml-auto flex items-center">
+                                    <div className="w-8 h-8 flex items-center justify-center">
                                         <CircularProgress
                                             value={form.getValues("body") ?? ""}
                                         />
                                     </div>
+
                                     <Button
                                         type="submit"
                                         isLoading={postMutation.isLoading}

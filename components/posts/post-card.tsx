@@ -24,7 +24,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         });
     }, [post]);
     return (
-        <div className="flex w-full p-4">
+        <div className="flex w-full p-4 hover:bg-zinc-100 transition">
             {/* AVATAR */}
             <HoverCard>
                 <HoverCardTrigger>
