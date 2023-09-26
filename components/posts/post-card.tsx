@@ -24,7 +24,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         });
     }, [post]);
     return (
-        <div className="flex w-full p-4 hover:bg-zinc-100 transition">
+        <div className="flex w-full p-4 hover:bg-zinc-100 dark:hover:bg-accent transition">
             {/* AVATAR */}
             <HoverCard>
                 <HoverCardTrigger>
@@ -34,12 +34,19 @@ export const PostCard = ({ post }: PostCardProps) => {
                     <div className="rounded-xl w-full">
                         <UserAvatar user={post.author} isClickable />
 
-                        <p className="text-lg font-semibold capitalize mt-2">
-                            {post.author.name}
-                        </p>
-                        <p className="text-lg font-semibold capitalize mt-1 text-zinc-600 dark:text-zinc-400">
-                            {post.author.username}
-                        </p>
+                        <div className="ml-1">
+                            <p className="text-lg font-semibold capitalize mt-2">
+                                {post.author.name}
+                            </p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                                @{post.author.username}
+                            </p>
+                            {post.author.description && (
+                                <p className="text-sm mt-1">
+                                    {post.author.description}
+                                </p>
+                            )}
+                        </div>
                     </div>
                     <div className="absolute right-4 top-4">
                         <FollowButton userId={post.author.id} />
@@ -73,9 +80,7 @@ export const PostCard = ({ post }: PostCardProps) => {
                 </div>
 
                 {/* post body */}
-                <Link
-                    href={`/${post.author.username}/status/${post.id}`}
-                >
+                <Link href={`/${post.author.username}/status/${post.id}`}>
                     <p className="mt-1/2 mb-1">{post.body}</p>
 
                     {post.imageUrl && (

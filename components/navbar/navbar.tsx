@@ -6,6 +6,7 @@ import {
     UserIcon,
     BellIcon,
     BellDotIcon,
+    LogInIcon,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -14,6 +15,7 @@ import { NavbarItem } from "./navbar-item";
 import { UserNav } from "./user-nav";
 import { MoreNavItem } from "./more-nav-item";
 import { PostButton } from "./post-button";
+import { useLoginModal } from "@/hooks/use-login-modal";
 
 type NavbarItemType = {
     icon: LucideIcon;
@@ -23,6 +25,7 @@ type NavbarItemType = {
 };
 
 export const Navbar = () => {
+    const loginModal = useLoginModal();
     const pathname = usePathname();
     const router = useRouter();
     const { data: session } = useSession();
@@ -56,7 +59,7 @@ export const Navbar = () => {
             <div className="space-y-4 mx-2">
                 <NavbarLogo />
 
-                {session?.user && (
+                {session?.user ? (
                     <>
                         {config.map((item, idx) => (
                             <NavbarItem
@@ -70,7 +73,14 @@ export const Navbar = () => {
                         <MoreNavItem />
                         <PostButton />
                     </>
-                )}
+                ) : (
+                            <NavbarItem
+                                active={false}
+                                onClick={loginModal.open}
+                                text="Sign In"
+                                icon={LogInIcon}
+                            />
+                    )}
             </div>
             {session?.user && <UserNav user={session.user} />}
         </div>
