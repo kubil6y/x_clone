@@ -55,6 +55,7 @@ model User {
     createdAt      DateTime  @default(now())
     updatedAt      DateTime  @updatedAt
     posts          Post[]
+    likes          Like[]
 
     @@map("users")
 }
@@ -77,6 +78,17 @@ model Post {
     isDeleted Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    likes     Like[]
 
     @@map("posts")
+}
+
+model Like {
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@id([userId, postId])
+    @@map("likes")
 }

@@ -5,24 +5,57 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { PostWithUserResponse } from "@/types";
+import { PostWithUserWithLikes } from "@/types";
 import { UserAvatar } from "../user-avatar";
 import { formatDistance } from "date-fns";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FollowButton } from "../follow-button";
+import { useMutation } from "@tanstack/react-query";
+import { LikePostSchema } from "@/validators/like";
+import { Session } from "next-auth";
 
 interface PostCardProps {
-    post: PostWithUserResponse;
+    post: PostWithUserWithLikes;
+    session: Session | null;
 }
 
-export const PostCard = ({ post }: PostCardProps) => {
+export const PostCard = ({ post, session }: PostCardProps) => {
+    const [hasLiked, setHasLiked] = useState<boolean>(false);
+
+    useEffect(() => {
+        const hasLiked = post.likes.find(
+            (like) => like.userId === session?.user?.id
+        );
+        if (hasLiked) {
+            setHasLiked(true);
+        } else {
+            setHasLiked(false);
+        }
+    }, [post]);
+
     const timeAgo = useMemo(() => {
         return formatDistance(new Date(post.createdAt), new Date(), {
             addSuffix: true,
         });
     }, [post]);
+
+    const likeMutation = useMutation({
+        mutationFn: async () => {
+            const payload: LikePostSchema = {
+                postId: post.id,
+            };
+            const response = await axios.post(
+                `/posts/${post.id}/like`,
+                payload
+            );
+            return response.data;
+        },
+        onMutate: () => {}
+    });
+
     return (
         <div className="flex w-full p-4 hover:bg-zinc-100 dark:hover:bg-accent transition">
             {/* AVATAR */}
@@ -79,7 +112,7 @@ export const PostCard = ({ post }: PostCardProps) => {
                     </Link>
                 </div>
 
-                {/* post body */}
+                {/* POST BODY */}
                 <Link href={`/${post.author.username}/status/${post.id}`}>
                     <p className="mt-1/2 mb-1">{post.body}</p>
 
@@ -95,6 +128,16 @@ export const PostCard = ({ post }: PostCardProps) => {
                         </div>
                     )}
                 </Link>
+
+                {/* POST ACTIONS */}
+                <div className="flex items-center justify-between">
+                    <div>comment</div>
+                    <div>retweet</div>
+                    <div onClick={() => likeMutation.mutate()}>
+                        {hasLiked ? "dislike" : "like"}
+                    </div>
+                    <div>bookmark</div>
+                </div>
             </div>
         </div>
     );

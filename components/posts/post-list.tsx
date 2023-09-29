@@ -1,17 +1,19 @@
 "use client";
 
-import { PostWithUserResponse } from "@/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import queryString from "query-string";
+import { PostWithUserWithLikes } from "@/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { PostCard } from "./post-card";
+import { Session } from "next-auth";
 
-interface PostListProps { }
+interface PostListProps {
+    session: Session | null;
+}
 
 // https://tanstack.com/query/v4/docs/react/examples/react/load-more-infinite-scroll
-export const PostList = ({ }: PostListProps) => {
+export const PostList = ({ session }: PostListProps) => {
     const { ref, inView } = useInView();
 
     async function fetchMessages({ pageParam = undefined }) {
@@ -35,11 +37,8 @@ export const PostList = ({ }: PostListProps) => {
         error,
         isFetching,
         isFetchingNextPage,
-        isFetchingPreviousPage,
         fetchNextPage,
-        fetchPreviousPage,
         hasNextPage,
-        hasPreviousPage,
     } = useInfiniteQuery({
         queryKey: ["posts"],
         queryFn: fetchMessages,
@@ -68,10 +67,13 @@ export const PostList = ({ }: PostListProps) => {
                     {data.pages.map((page) => {
                         if (page?.status === "success") {
                             return page.data.posts.map(
-                                (post: PostWithUserResponse) => {
+                                (post: PostWithUserWithLikes) => {
                                     return (
                                         <Fragment key={post.id}>
-                                            <PostCard post={post} />
+                                            <PostCard
+                                                post={post}
+                                                session={session}
+                                            />
                                         </Fragment>
                                     );
                                 }

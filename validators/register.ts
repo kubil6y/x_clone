@@ -7,7 +7,6 @@ export const registerSchema = z.object({
     email: z
         .string()
         .trim()
-        .toLowerCase()
         .email({ message: "Email is invalid" }),
     username: z
         .string()

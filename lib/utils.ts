@@ -12,12 +12,10 @@ export function populateUserResponse(user: User): UserResponse {
         id: user.id,
         email: user.email ?? "",
         description: user.description ?? null,
-        emailVerified: user.emailVerified ?? null,
         username: user.username ?? null,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
         image: user.image ?? null,
         name: user.name ?? null,
+        createdAt: user.createdAt,
     };
     return userResponse;
 }

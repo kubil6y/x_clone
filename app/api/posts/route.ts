@@ -3,9 +3,9 @@ import { ErrorResponse } from "@/lib/error-response";
 import { getAuthSession } from "@/lib/nextauth";
 import { populateUserResponse } from "@/lib/utils";
 import { ApiResponse } from "@/types/api-response";
-import { PostWithUserResponse } from "@/types";
+import { PostWithUserWithLikes } from "@/types";
 import { createPostSchema } from "@/validators/post";
-import { Post, User } from "@prisma/client";
+import { Like, Post, User } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { NextResponse } from "next/server";
 
@@ -18,19 +18,19 @@ export async function GET(req: Request) {
 
         //await sleep(2000); // TODO remove
 
-        let posts: (Post & { author: User })[] = [];
+        let posts: (Post & { author: User; likes: Like[] })[] = [];
         if (cursor) {
             posts = await prisma.post.findMany({
                 skip: 1, // skip the cursor
                 take: POSTS_TAKE,
                 cursor: { id: cursor },
-                include: { author: true },
+                include: { author: true, likes: true },
                 orderBy: { createdAt: "desc" },
             });
         } else {
             posts = await prisma.post.findMany({
                 take: POSTS_TAKE,
-                include: { author: true },
+                include: { author: true, likes: true },
                 orderBy: { createdAt: "desc" },
             });
         }
@@ -52,7 +52,7 @@ export async function GET(req: Request) {
         });
 
         const response: ApiResponse<{
-            posts: PostWithUserResponse[];
+            posts: PostWithUserWithLikes[];
             nextCursor: string | null;
         }> = {
             status: "success",
