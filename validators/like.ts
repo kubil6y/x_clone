@@ -5,4 +5,3 @@ export const likePostSchema = z.object({
 });
 
 export type LikePostSchema = z.infer<typeof likePostSchema>;
-

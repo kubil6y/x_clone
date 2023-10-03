@@ -57,6 +57,7 @@ model User {
     posts          Post[]
     likes          Like[]
     comments       Comment[]
+    retweets       Retweet[]
 
     @@map("users")
 }
@@ -81,8 +82,19 @@ model Post {
     updatedAt DateTime  @updatedAt
     likes     Like[]
     comments  Comment[]
+    retweets  Retweet[]
 
     @@map("posts")
+}
+
+model Retweet {
+    postId String
+    post   Post   @relation(fields: [postId], references: [id])
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    @@id([userId, postId])
+    @@map("retweets")
 }
 
 model Like {

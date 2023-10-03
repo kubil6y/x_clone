@@ -1,7 +1,7 @@
 "use client";
 
 import queryString from "query-string";
-import { PostWithUserWithLikes } from "@/types";
+import { PostWithUserWithLikesWithRetweets } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Fragment, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -67,7 +67,7 @@ export const PostList = ({ session }: PostListProps) => {
                     {data.pages.map((page) => {
                         if (page?.status === "success") {
                             return page.data.posts.map(
-                                (post: PostWithUserWithLikes) => {
+                                (post: PostWithUserWithLikesWithRetweets) => {
                                     return (
                                         <Fragment key={post.id}>
                                             <PostCard

@@ -1,15 +1,19 @@
-interface  PostDetailsPageProps {
+"use client";
+
+interface PostDetailsPageProps {
     params: {
         username: string;
         postId: string;
-    }
+    };
 }
 
-const PostDetailsPage = ({params}: PostDetailsPageProps) => {
+const PostDetailsPage = ({ params }: PostDetailsPageProps) => {
     return (
         <div>
             <p>PostDetailsPage.tsx</p>
-            <p>{params.username} {params.postId}</p>
+            <p>
+                {params.username} {params.postId}
+            </p>
         </div>
     );
 };

@@ -3,11 +3,11 @@ import { ErrorResponse } from "@/lib/error-response";
 import { getAuthSession } from "@/lib/nextauth";
 import { populateUserResponse } from "@/lib/utils";
 import { ApiResponse } from "@/types/api-response";
-import { PostWithUserWithLikes } from "@/types";
+import { PostWithUserWithLikesWithRetweets, PostWithUserWithLikesWithRetweetsAtServer } from "@/types";
 import { createPostSchema } from "@/validators/post";
-import { Like, Post, User } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { NextResponse } from "next/server";
+import { Post } from "@prisma/client";
 
 const POSTS_TAKE = 10;
 
@@ -16,21 +16,20 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const cursor = searchParams.get("cursor");
 
-        //await sleep(2000); // TODO remove
+        let posts: PostWithUserWithLikesWithRetweetsAtServer[] = [];
 
-        let posts: (Post & { author: User; likes: Like[] })[] = [];
         if (cursor) {
             posts = await prisma.post.findMany({
                 skip: 1, // skip the cursor
                 take: POSTS_TAKE,
                 cursor: { id: cursor },
-                include: { author: true, likes: true },
+                include: { author: true, likes: true, retweets: true },
                 orderBy: { createdAt: "desc" },
             });
         } else {
             posts = await prisma.post.findMany({
                 take: POSTS_TAKE,
-                include: { author: true, likes: true },
+                include: { author: true, likes: true, retweets: true },
                 orderBy: { createdAt: "desc" },
             });
         }
@@ -52,7 +51,7 @@ export async function GET(req: Request) {
         });
 
         const response: ApiResponse<{
-            posts: PostWithUserWithLikes[];
+            posts: PostWithUserWithLikesWithRetweets[];
             nextCursor: string | null;
         }> = {
             status: "success",

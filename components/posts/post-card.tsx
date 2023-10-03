@@ -8,7 +8,7 @@ import {
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { PostWithUserWithLikes } from "@/types";
+import { PostWithUserWithLikesWithRetweets } from "@/types";
 import { UserAvatar } from "../user-avatar";
 import { formatDistance } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
@@ -17,17 +17,17 @@ import { useMutation } from "@tanstack/react-query";
 import { LikePostSchema } from "@/validators/like";
 import { Session } from "next-auth";
 import { useToast } from "../ui/use-toast";
-import { useCommentModal } from "@/hooks/use-comment-modal";
 
 interface PostCardProps {
-    post: PostWithUserWithLikes;
+    post: PostWithUserWithLikesWithRetweets;
     session: Session | null;
 }
 
 export const PostCard = ({ post, session }: PostCardProps) => {
     const [hasLiked, setHasLiked] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
-    const commentModal = useCommentModal();
+    const [hasRetweeted, setHasRetweeted] = useState<boolean>(false);
+    const [retweetCount, setRetweetCount] = useState<number>(0);
 
     const { toast } = useToast();
 
@@ -41,6 +41,18 @@ export const PostCard = ({ post, session }: PostCardProps) => {
             setHasLiked(false);
         }
         setLikeCount(post?.likes?.length ?? 0);
+    }, [post]);
+
+    useEffect(() => {
+        const hasRetweetd = post.retweets.find(
+            (retweet) => retweet.userId === session?.user?.id
+        );
+        if (hasRetweetd) {
+            setHasRetweeted(true);
+        } else {
+            setHasRetweeted(false);
+        }
+        setRetweetCount(post?.retweets?.length ?? 0);
     }, [post]);
 
     const timeAgo = useMemo(() => {
@@ -76,6 +88,38 @@ export const PostCard = ({ post, session }: PostCardProps) => {
             toast({
                 title: "Something went wrong.",
                 description: "Your vote was not registered. Please try again.",
+                variant: "destructive",
+            });
+        },
+    });
+
+    const retweetMutation = useMutation({
+        mutationFn: async () => {
+            const payload: LikePostSchema = {
+                postId: post.id,
+            };
+            const response = await axios.post("/api/posts/retweet", payload);
+            return response.data;
+        },
+        onMutate: () => {
+            if (hasRetweeted) {
+                setRetweetCount(Math.min(0, retweetCount - 1));
+            } else {
+                setRetweetCount((x) => x + 1);
+            }
+            setHasRetweeted((b) => !b);
+        },
+        onError: () => {
+            if (hasRetweeted) {
+                setRetweetCount(Math.min(0, retweetCount - 1));
+            } else {
+                setRetweetCount((x) => x + 1);
+            }
+            setHasRetweeted((b) => !b);
+            toast({
+                title: "Something went wrong.",
+                description:
+                    "Your repost action was not registered. Please try again.",
                 variant: "destructive",
             });
         },
@@ -156,8 +200,17 @@ export const PostCard = ({ post, session }: PostCardProps) => {
 
                 {/* POST ACTIONS */}
                 <div className="flex items-center justify-between">
-                    <div onClick={commentModal.open}>comment</div>
-                    <div>retweet</div>
+                    <div
+                        onClick={() => {
+                            /* TODO */
+                        }}
+                    >
+                        comment
+                    </div>
+                    <div onClick={() => retweetMutation.mutate()}>
+                        {hasRetweeted ? "undoretweet" : "retweet"}{" "}
+                        {retweetCount}
+                    </div>
                     <div onClick={() => likeMutation.mutate()}>
                         {hasLiked ? "dislike" : "like"} {likeCount}
                     </div>

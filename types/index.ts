@@ -1,4 +1,4 @@
-import { Like, Post } from "@prisma/client";
+import { Like, Post, Retweet, User } from "@prisma/client";
 
 export type UserResponse = {
     id: string;
@@ -10,7 +10,15 @@ export type UserResponse = {
     createdAt: Date;
 };
 
-export type PostWithUserWithLikes = Post & {
+export type PostWithUserWithLikesWithRetweets = Post & {
     author: UserResponse;
     likes: Like[];
+    retweets: Retweet[];
+};
+
+
+export type PostWithUserWithLikesWithRetweetsAtServer = Post & {
+    author: User;
+    likes: Like[];
+    retweets: Retweet[];
 };
