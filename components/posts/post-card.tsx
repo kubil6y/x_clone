@@ -16,6 +16,7 @@ import { FollowButton } from "../follow-button";
 import { useMutation } from "@tanstack/react-query";
 import { LikePostSchema } from "@/validators/like";
 import { Session } from "next-auth";
+import { useToast } from "../ui/use-toast";
 
 interface PostCardProps {
     post: PostWithUserWithLikes;
@@ -24,6 +25,9 @@ interface PostCardProps {
 
 export const PostCard = ({ post, session }: PostCardProps) => {
     const [hasLiked, setHasLiked] = useState<boolean>(false);
+    const [likeCount, setLikeCount] = useState<number>(0);
+
+    const { toast } = useToast();
 
     useEffect(() => {
         const hasLiked = post.likes.find(
@@ -34,6 +38,7 @@ export const PostCard = ({ post, session }: PostCardProps) => {
         } else {
             setHasLiked(false);
         }
+        setLikeCount(post?.likes?.length ?? 0);
     }, [post]);
 
     const timeAgo = useMemo(() => {
@@ -47,13 +52,31 @@ export const PostCard = ({ post, session }: PostCardProps) => {
             const payload: LikePostSchema = {
                 postId: post.id,
             };
-            const response = await axios.post(
-                `/posts/${post.id}/like`,
-                payload
-            );
+            const response = await axios.post("/api/posts/like", payload);
             return response.data;
         },
-        onMutate: () => {}
+        onMutate: () => {
+            if (hasLiked) {
+                setLikeCount(Math.min(0, likeCount - 1));
+            } else {
+                setLikeCount((x) => x + 1);
+            }
+            setHasLiked((b) => !b);
+        },
+        onError: () => {
+            if (hasLiked) {
+                setLikeCount(Math.min(0, likeCount - 1));
+            } else {
+                setLikeCount((x) => x + 1);
+            }
+            setHasLiked((b) => !b);
+
+            toast({
+                title: "Something went wrong.",
+                description: "Your vote was not registered. Please try again.",
+                variant: "destructive",
+            });
+        },
     });
 
     return (
@@ -134,7 +157,7 @@ export const PostCard = ({ post, session }: PostCardProps) => {
                     <div>comment</div>
                     <div>retweet</div>
                     <div onClick={() => likeMutation.mutate()}>
-                        {hasLiked ? "dislike" : "like"}
+                        {hasLiked ? "dislike" : "like"} {likeCount}
                     </div>
                     <div>bookmark</div>
                 </div>

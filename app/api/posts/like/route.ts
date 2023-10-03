@@ -2,8 +2,8 @@ import { ErrorResponse } from "@/lib/error-response";
 import { getAuthSession } from "@/lib/nextauth";
 import prisma from "@/lib/prisma";
 import { ApiResponse } from "@/types/api-response";
+import { HttpStatusCode } from "@/types/http-status-code";
 import { likePostSchema } from "@/validators/like";
-import { HttpStatusCode } from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request, _res: Response) {
@@ -38,7 +38,7 @@ export async function POST(req: Request, _res: Response) {
                     },
                 },
             });
-            return new Response(null, { status: HttpStatusCode.NoContent });
+            return new Response(null, { status: HttpStatusCode.NO_CONTENT });
         } else {
             await prisma.like.create({
                 data: {

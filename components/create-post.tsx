@@ -58,12 +58,13 @@ export const CreatePost = ({
             const response = await axios.post("/api/posts", input);
             return response.data;
         },
-        onSuccess: () => {
+        onSuccess: (newData) => {
             form.reset();
             if (postModal.isOpen) {
                 postModal.close();
             }
             // TODO: optimistic update posts
+            console.log(newData);
         },
         onError: (err) => {
             if (axios.isAxiosError(err)) {

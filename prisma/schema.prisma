@@ -56,6 +56,7 @@ model User {
     updatedAt      DateTime  @updatedAt
     posts          Post[]
     likes          Like[]
+    comments       Comment[]
 
     @@map("users")
 }
@@ -70,15 +71,16 @@ model VerificationToken {
 }
 
 model Post {
-    id        String   @id @default(cuid())
+    id        String    @id @default(cuid())
     authorId  String
-    author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
     body      String?
     imageUrl  String?
-    isDeleted Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    isDeleted Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
     likes     Like[]
+    comments  Comment[]
 
     @@map("posts")
 }
@@ -91,4 +93,18 @@ model Like {
 
     @@id([userId, postId])
     @@map("likes")
+}
+
+model Comment {
+    id        String   @id @default(cuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    postId    String
+    post      Post     @relation(fields: [postId], references: [id])
+    body      String
+    isDeleted Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("comments")
 }
