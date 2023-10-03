@@ -17,6 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import { LikePostSchema } from "@/validators/like";
 import { Session } from "next-auth";
 import { useToast } from "../ui/use-toast";
+import { useCommentModal } from "@/hooks/use-comment-modal";
 
 interface PostCardProps {
     post: PostWithUserWithLikes;
@@ -26,6 +27,7 @@ interface PostCardProps {
 export const PostCard = ({ post, session }: PostCardProps) => {
     const [hasLiked, setHasLiked] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
+    const commentModal = useCommentModal();
 
     const { toast } = useToast();
 
@@ -154,7 +156,7 @@ export const PostCard = ({ post, session }: PostCardProps) => {
 
                 {/* POST ACTIONS */}
                 <div className="flex items-center justify-between">
-                    <div>comment</div>
+                    <div onClick={commentModal.open}>comment</div>
                     <div>retweet</div>
                     <div onClick={() => likeMutation.mutate()}>
                         {hasLiked ? "dislike" : "like"} {likeCount}

@@ -1,3 +1,4 @@
+import { CommentModal } from "@/components/modals/comment-modal";
 import { LoginModal } from "@/components/modals/login-modal";
 import { PostModal } from "@/components/modals/post-modal";
 import { RegisterModal } from "@/components/modals/register-modal";
@@ -10,6 +11,7 @@ export const ModalProvider = () => {
             <LoginModal />
             <ThemeModal />
             <PostModal />
+            <CommentModal />
         </>
     );
 }

@@ -24,11 +24,8 @@ import { XIcon } from "lucide-react";
 import { ImageUpload } from "./image-upload";
 import Image from "next/image";
 import { EmojiPicker } from "./emoji-picker";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-
-const testImageUrl =
-    "https://res.cloudinary.com/dnqoeal8o/image/upload/v1695575822/r4hdurldtd2psb432iof.jpg";
 
 interface CreatePostProps {
     minRows?: number;
@@ -40,6 +37,7 @@ export const CreatePost = ({
     minRows = 2,
 }: CreatePostProps) => {
     const postModal = usePostModal();
+    const queryClient = useQueryClient();
 
     const hasMounted = useHasMounted();
     const { toast } = useToast();
@@ -58,13 +56,12 @@ export const CreatePost = ({
             const response = await axios.post("/api/posts", input);
             return response.data;
         },
-        onSuccess: (newData) => {
+        onSuccess: () => {
             form.reset();
             if (postModal.isOpen) {
                 postModal.close();
             }
-            // TODO: optimistic update posts
-            console.log(newData);
+            queryClient.invalidateQueries(["posts"]);
         },
         onError: (err) => {
             if (axios.isAxiosError(err)) {
